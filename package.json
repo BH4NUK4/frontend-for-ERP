@@ -1,0 +1,20 @@
+{
+  "name": "erp-desktop",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "app": "electron ."
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "mssql": "^12.5.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^42.4.1",
+    "vite": "^8.0.16"
+  }
+}
