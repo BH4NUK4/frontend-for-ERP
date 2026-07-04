@@ -3,6 +3,9 @@ const path = require('path');
 const sql = require('mssql');
 require('dotenv').config();
 
+
+
+//DB connectivity
 const dbConfig = {
     user: process.env.DB_USER, 
     password: process.env.DB_PASSWORD, 
@@ -17,6 +20,7 @@ const dbConfig = {
 
 let mainWindow;
 
+//creating a deckstop window for application
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
@@ -27,13 +31,16 @@ function createWindow() {
             contextIsolation: true
         }
     });
+    
+    //wrap the window with this webapp
     mainWindow.loadURL('http://localhost:5173'); 
 }
+
 
 app.whenReady().then(() => {
     createWindow();
 
-    // --- INVENTORY ---
+    // inventory
     ipcMain.handle('get-inventory', async () => {
         try {
             await sql.connect(dbConfig);
@@ -42,7 +49,7 @@ app.whenReady().then(() => {
         } catch (err) { return { success: false, error: err.message }; }
     });
 
-    // BUG FIX: Query the view directly so Supplier columns match perfectly
+    // categorize items
     ipcMain.handle('get-inventory-by-category', async (event, categoryName) => {
         try {
             await sql.connect(dbConfig);
@@ -53,7 +60,7 @@ app.whenReady().then(() => {
         } catch (err) { return { success: false, error: err.message }; }
     });
 
-    // BUG FIX: Changed 'Price' to 'UnitPrice' and forced a SupplierID
+    // adding newer products
     ipcMain.handle('add-product', async (event, prodData) => {
         try {
             await sql.connect(dbConfig);
@@ -108,7 +115,7 @@ app.whenReady().then(() => {
         } catch (err) { return { success: false, error: err.message }; }
     });
 
-    // --- SUPPLIERS ---
+    // fetch suppliers -> create a view to do this!!
     ipcMain.handle('get-suppliers', async () => {
         try {
             await sql.connect(dbConfig);
@@ -125,6 +132,8 @@ app.whenReady().then(() => {
         } catch (err) { return { success: false, error: err.message }; }
     });
 
+
+    //
     ipcMain.handle('add-supplier', async (event, supData) => {
         try {
             await sql.connect(dbConfig);
